@@ -1,0 +1,19 @@
+svg {
+  background-color: var(--bg-secondary);
+}
+
+svg path {
+  stroke-width: 2;
+  fill: none;
+}
+
+svg .axis path, svg .axis line {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+svg text {
+  fill: var(--text);
+}

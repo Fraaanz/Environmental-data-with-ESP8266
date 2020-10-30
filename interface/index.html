@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<html lang="de">
+
+<head>
+  <title>Sensordaten</title>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="svg.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+</head>
+
+<body>
+  <div class="container-lg">
+    <div class="row">
+      <div class="col-12">
+          <h1 class="alert alert-info h6">
+            Sensordaten<span id="sensorLocation"></span>
+          </h1>
+      </div>
+    </div>
+  </div>
+  <div class="container-lg">
+    <div class="row">
+      <div class="col-12">
+        <div class="current">
+          <div id="current-value-text" class="h6">NaN</div>
+          <div id="current-value" class="h1">NaN</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-lg">
+    <div class="svg-graph"></div>
+  </div>
+  <div class="container-lg">
+    <form>
+      <div class="row">
+        <div class="form-group col-12 col-md-4">
+          <label for="queryCol">Datenquelle:</label>
+          <select name="queryCol" id="queryCol" class="form-control">
+            <option value="value1">Temperatur</option>
+            <option value="value2">rel. Luftfeuchte</option>
+            <option value="value3">Lärmemission</option>
+          </select>
+        </div>
+        <div class="form-group col-12 col-md-4">
+          <label for="xDaysPast">Anzahl der Tage:</label>
+          <select name="xDaysPast" id="xDaysPast" class="form-control">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7" selected="true">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+          </select>
+        </div>
+        <div class="form-group col-12 col-md-4">
+          <label for="leaveOut">Messwerte:</label>
+          <select name="leaveOut" id="leaveOut" class="form-control">
+            <option value="64">wenige</option>
+            <option value="16">viele</option>
+            <option value="1">alle</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-12 col-md-4">
+          <button class="btn btn-primary">
+            Anwenden
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  </div>
+
+  <script type="module" src="script.js"></script>
+
+</body>
+
+</html>

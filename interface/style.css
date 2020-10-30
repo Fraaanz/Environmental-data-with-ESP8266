@@ -1,0 +1,19 @@
+:root {
+  --text: #000000;
+  --line:#000000;
+  --fill: #000000; 
+  --bg: #ffffff; 
+  --bg-secondary: #f2f2f2; 
+  --highlight: #FF0000;
+}
+
+body {
+  font: 1rem Arial;
+  color: var(--text);
+  background: var(--bg);
+  margin: 32px 32px 128px 18px;
+}
+
+.row {
+  margin: 1rem auto 2rem;
+}
