@@ -1,3 +1,4 @@
+
 var url_string = window.location.href;
 var url = new URL(url_string);
 
@@ -91,6 +92,8 @@ var svg = d3.select("body .svg-graph").append("svg").attr("viewBox", "0 0 " + (
 
 // console.log("get-data.php?xDaysPast=" + xDaysPast + "&leaveOut=" + leaveOut + "&queryCol=" + queryCol);
 
+document.querySelector(".svg-graph").classList.add("loader");
+
 // Get the data //////////////////////////////////////////////////////////////////
 
 d3.json("get-data.php?xDaysPast=" + xDaysPast + "&leaveOut=" + leaveOut + "&queryCol=" + queryCol, function (error, data) {
@@ -173,5 +176,7 @@ d3.json("get-data.php?xDaysPast=" + xDaysPast + "&leaveOut=" + leaveOut + "&quer
 
   // Add the Y Axis
   svg.append("g").attr("class", "y axis").call(yAxis);
+
+  document.querySelector(".svg-graph").classList.remove("loader");
 
 });

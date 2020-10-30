@@ -17,3 +17,9 @@ body {
 .row {
   margin: 1rem auto 2rem;
 }
+
+.loader svg {
+  background-image: url(loader.gif);
+  background-repeat: no-repeat;
+  background-position: center;
+}
