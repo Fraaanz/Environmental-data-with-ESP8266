@@ -12,15 +12,17 @@ if (queryCol == null) { queryCol = 'value1'; };
 
 // Define: What value is what
 
-if 
-(queryCol == 'value1') {
+var meanValues;
+if
+  (queryCol == 'value1') {
   var valueUnit = '°C'; var valueText = 'Temperatur';
-} else if 
-(queryCol == 'value2') {
+} else if
+  (queryCol == 'value2') {
   var valueUnit = '%'; var valueText = 'rel. Luftfeuchte';
-} else if 
-(queryCol == 'value3') {
-  var valueUnit = 'db'; var valueText = 'Lärmemission';
+} else if
+  (queryCol == 'value3') {
+  var valueUnit = 'db'; var valueText = 'Lärmemission'
+  var meanValues = true;
 } /* else if 
 (queryCol == 'value4') {
   valueUnit = 'hPa'; valueText = 'Luftdruck';
@@ -94,12 +96,45 @@ var svg = d3.select("body .svg-graph").append("svg").attr("viewBox", "0 0 " + (
 d3.json("get-data.php?xDaysPast=" + xDaysPast + "&leaveOut=" + leaveOut + "&queryCol=" + queryCol, function (error, data) {
 
   document.getElementById("current-value-text").innerHTML = valueText;
-  document.getElementById("current-value").innerHTML = Math.round(data[0][queryCol] * 2) / 2 + "<span class='current-value-unit'>"+ valueUnit + "<span>";
+  document.getElementById("current-value").innerHTML = Math.round(data[0][queryCol] * 2) / 2 + "<span class='current-value-unit'>" + valueUnit + "<span>";
 
-  data.forEach(function (d) {
-    d.reading_time = parseDate(d.reading_time);
-    d.value = + d[queryCol];
-  });
+  if (meanValues == true) {
+    function length(obj) {
+      return Object.keys(obj).length;
+    }
+
+    var i = 0;
+    var calcValue;
+
+    data.forEach(function (d) {
+      d.reading_time = parseDate(d.reading_time);
+
+      var meanData = parseInt(data[i][queryCol]);
+      // console.log("meanData " + meanData);
+
+      var meanAfter = meanData;
+      for (var j = 0; j <= 20; j++) {
+
+        var iAfter = i + j;
+        if (i >= length(data) - j) {
+          iAfter = length(data) - j;
+        };
+        meanAfter = meanAfter + parseInt(data[iAfter][queryCol]);
+        // console.log("meanAfter " + j + "🎯 " + meanAfter);
+      }
+      meanData = (meanAfter / (j + 1));
+      // console.log("meanData " + meanData);
+
+      d.value = + meanData;
+      i++;
+    });
+  }
+  else {
+    data.forEach(function (d) {
+      d.reading_time = parseDate(d.reading_time);
+      d.value = + d[queryCol];
+    });
+  }
 
   // Scale the range of the data
   x.domain(d3.extent(data, function (d) {
@@ -113,25 +148,25 @@ d3.json("get-data.php?xDaysPast=" + xDaysPast + "&leaveOut=" + leaveOut + "&quer
 
   // Set the gradient
 
-  var max = d3.max(data, function(d) { return +d.value; })
+  var max = d3.max(data, function (d) { return +d.value; })
 
   svg.append("linearGradient")
-      .attr("id", "line-gradient")
-      .attr("gradientUnits", "userSpaceOnUse")
-      .attr("x1", 0)
-      .attr("y1", y(0))
-      .attr("x2", 0)
-      .attr("y2", y(max))
-      .selectAll("stop")
-        .data([
-          {offset: "30%", color: "#0044FF"},
-          {offset: "100%", color: "#FF0044"}
-        ])
-      .enter().append("stop")
-        .attr("offset", function(d) { return d.offset; })
-        .attr("stop-color", function(d) { return d.color; });
+    .attr("id", "line-gradient")
+    .attr("gradientUnits", "userSpaceOnUse")
+    .attr("x1", 0)
+    .attr("y1", y(0))
+    .attr("x2", 0)
+    .attr("y2", y(max))
+    .selectAll("stop")
+    .data([
+      { offset: "30%", color: "#0044FF" },
+      { offset: "100%", color: "#FF0044" }
+    ])
+    .enter().append("stop")
+    .attr("offset", function (d) { return d.offset; })
+    .attr("stop-color", function (d) { return d.color; });
 
-  svg.append("path").attr("class", "line").attr("stroke", "url(#line-gradient)" ).attr("d", valueline(data));
+  svg.append("path").attr("class", "line").attr("stroke", "url(#line-gradient)").attr("d", valueline(data));
 
   // Add the X Axis
   svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + height + ")").call(xAxis);
