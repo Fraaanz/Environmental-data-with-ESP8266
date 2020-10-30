@@ -93,6 +93,7 @@ var svg = d3.select("body .svg-graph").append("svg").attr("viewBox", "0 0 " + (
 // console.log("get-data.php?xDaysPast=" + xDaysPast + "&leaveOut=" + leaveOut + "&queryCol=" + queryCol);
 
 document.querySelector(".svg-graph").classList.add("loader");
+document.querySelector(".current").classList.add("loadertext");
 
 // Get the data //////////////////////////////////////////////////////////////////
 
@@ -178,5 +179,6 @@ d3.json("get-data.php?xDaysPast=" + xDaysPast + "&leaveOut=" + leaveOut + "&quer
   svg.append("g").attr("class", "y axis").call(yAxis);
 
   document.querySelector(".svg-graph").classList.remove("loader");
+  document.querySelector(".current").classList.remove("loadertext");
 
 });

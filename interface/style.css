@@ -1,9 +1,9 @@
 :root {
   --text: #000000;
-  --line:#000000;
-  --fill: #000000; 
-  --bg: #ffffff; 
-  --bg-secondary: #f2f2f2; 
+  --line: #000000;
+  --fill: #000000;
+  --bg: #ffffff;
+  --bg-secondary: #f2f2f2;
   --highlight: #FF0000;
 }
 
@@ -18,8 +18,65 @@ body {
   margin: 1rem auto 2rem;
 }
 
+@keyframes loaderAni {
+  0% {
+    opacity: 0.75;
+  }
+  50% {
+    opacity: 0.10;
+  }
+  100% {
+    opacity: 0.75;
+  }
+}
+
+.loadertext {
+  animation: loaderAni 2s infinite;
+}
+
+.loader {
+  background-color: var(--bg-secondary);
+  opacity: 1;
+}
+
 .loader svg {
-  background-image: url(loader.gif);
-  background-repeat: no-repeat;
-  background-position: center;
+  background-color: transparent !important;
+}
+
+.loader .lds-ring {
+  display: inline-block;
+  position: absolute;
+  left: calc(50% - 40px);
+  top: calc(50% - 40px);
+  width: 80px;
+  height: 80px;
+}
+.loader .lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border: 8px solid #000;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #000 transparent transparent transparent;
+}
+.loader.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.loader.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.loader.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
