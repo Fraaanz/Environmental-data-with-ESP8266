@@ -37,6 +37,7 @@ body {
 .loader {
   background-color: var(--bg-secondary);
   opacity: 1;
+  position: relative;
 }
 
 .loader svg {
@@ -50,6 +51,7 @@ body {
   top: calc(50% - 40px);
   width: 80px;
   height: 80px;
+  transform: scale(0.5);
 }
 .loader .lds-ring div {
   box-sizing: border-box;
