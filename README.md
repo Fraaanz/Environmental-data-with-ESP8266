@@ -1,5 +1,5 @@
-# ESP8266 Weather station 
-##### (temperature, humidity, dew point, decibel)
+# Environmental data with ESP8266
+### (temperature, humidity, dew point, decibel)
 IoT getting started with ESP8266 (NodeMCU V1), DHT22 and LM393 Sensor
 
 ### Firmware
