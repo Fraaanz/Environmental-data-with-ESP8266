@@ -101,7 +101,8 @@ d3.json("get-data.php?xDaysPast=" + xDaysPast + "&leaveOut=" + leaveOut + "&quer
 
   document.getElementById("current-value-text").innerHTML = valueText;
   document.getElementById("current-value").innerHTML = Math.round(data[0][queryCol] * 2) / 2 + "<span class='current-value-unit'>" + valueUnit + "<span>";
-
+  console.log(data[0].reading_time);
+  
   if (meanValues == true) {
     function length(obj) {
       return Object.keys(obj).length;
