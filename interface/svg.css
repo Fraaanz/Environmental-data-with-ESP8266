@@ -19,3 +19,8 @@ svg .axis path, svg .axis line {
 svg text {
   fill: var(--text);
 }
+
+svg path.line2 {
+  stroke-width: 2;
+  stroke: #d5d5d5;
+}

@@ -13,17 +13,19 @@ if (queryCol == null) { queryCol = 'value1'; };
 
 // Define: What value is what
 
-var meanValues;
+var calcMeanValues;
 if
   (queryCol == 'value1') {
   var valueUnit = '°C'; var valueText = 'Temperatur';
+  var compareUnit = 'value2'
+  var showDewPoint = true;
 } else if
   (queryCol == 'value2') {
   var valueUnit = '%'; var valueText = 'rel. Luftfeuchte';
 } else if
   (queryCol == 'value3') {
   var valueUnit = 'db'; var valueText = 'Lärmemission'
-  var meanValues = true;
+  var calcMeanValues = true;
 } /* else if 
 (queryCol == 'value4') {
   valueUnit = 'hPa'; valueText = 'Luftdruck';
@@ -83,6 +85,13 @@ var valueline = d3.svg.line().interpolate("basis").x(function (d) {
   return y(d.value);
 });
 
+// Define the line
+var valueline2 = d3.svg.line().interpolate("basis").x(function (d) {
+  return x(d.reading_time);
+}).y(function (d) {
+  return y(d.value2);
+});
+
 // Adds the svg canvas
 var svg = d3.select("body .svg-graph").append("svg").attr("viewBox", "0 0 " + (
   width + margin.left + margin.right
@@ -90,20 +99,33 @@ var svg = d3.select("body .svg-graph").append("svg").attr("viewBox", "0 0 " + (
     height + margin.top + margin.bottom
   )).attr("width", "100%").attr("height", "100%").append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-// console.log("get-data.php?xDaysPast=" + xDaysPast + "&leaveOut=" + leaveOut + "&queryCol=" + queryCol);
-
 document.querySelector(".svg-graph").classList.add("loader");
 document.querySelector(".current").classList.add("loadertext");
 
 // Get the data //////////////////////////////////////////////////////////////////
 
-d3.json("get-data.php?xDaysPast=" + xDaysPast + "&leaveOut=" + leaveOut + "&queryCol=" + queryCol, function (error, data) {
+var queryColSnippet = queryCol;
+if (compareUnit) { queryColSnippet = queryCol + '%2C+' + compareUnit }
+
+console.log("Query URL: get-data.php?xDaysPast=" + xDaysPast + "&leaveOut=" + leaveOut + "&queryCol=" + queryColSnippet);
+
+d3.json("get-data.php?xDaysPast=" + xDaysPast + "&leaveOut=" + leaveOut + "&queryCol=" + queryColSnippet, function (error, data) {
+
+  //console.log('reading_time 0 = ' + data[0].reading_time);
+  //console.log('value1 0 = ' + data[0].value1);
+  //console.log('value1 0 = ' + data[0].value2);
+
+  if (showDewPoint == true) {
+    document.getElementById("current-value-additional").innerHTML = "Taupunkt";
+    // console.log(Math.round(dewPoint(parseInt(data[0].value1), parseInt(data[0].value2)) * 10) / 10);
+    document.getElementById("current-value-additional-value").innerHTML = Math.round(dewPoint(parseInt(data[0].value1), parseInt(data[0].value2)) * 10) / 10 + "<span class='current-value-unit'>" + valueUnit + "<span>";
+  }
 
   document.getElementById("current-value-text").innerHTML = valueText;
-  document.getElementById("current-value").innerHTML = Math.round(data[0][queryCol] * 2) / 2 + "<span class='current-value-unit'>" + valueUnit + "<span>";
-  console.log(data[0].reading_time);
-  
-  if (meanValues == true) {
+
+  document.getElementById("current-value").innerHTML = Math.round(data[0][queryCol] * 10) / 10 + "<span class='current-value-unit'>" + valueUnit + "<span>";
+
+  if (calcMeanValues == true) {
     function length(obj) {
       return Object.keys(obj).length;
     }
@@ -138,6 +160,10 @@ d3.json("get-data.php?xDaysPast=" + xDaysPast + "&leaveOut=" + leaveOut + "&quer
     data.forEach(function (d) {
       d.reading_time = parseDate(d.reading_time);
       d.value = + d[queryCol];
+      if (showDewPoint == true) {
+        d.value2 = dewPoint(parseInt(d[queryCol]), parseInt(d[compareUnit]));
+        console.log(d.value2);
+      }
     });
   }
 
@@ -172,6 +198,7 @@ d3.json("get-data.php?xDaysPast=" + xDaysPast + "&leaveOut=" + leaveOut + "&quer
     .attr("stop-color", function (d) { return d.color; });
 
   svg.append("path").attr("class", "line").attr("stroke", "url(#line-gradient)").attr("d", valueline(data));
+  svg.append("path").attr("class", "line2").attr("stroke", "url(#line-gradient)").attr("d", valueline2(data));
 
   // Add the X Axis
   svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + height + ")").call(xAxis);
@@ -183,3 +210,38 @@ d3.json("get-data.php?xDaysPast=" + xDaysPast + "&leaveOut=" + leaveOut + "&quer
   document.querySelector(".current").classList.remove("loadertext");
 
 });
+
+// Taupunkt Berechnung
+// THX to https://myscope.net/taupunkttemperatur/
+function dewPoint(t, r) {
+  // Konstante
+  var mw = 18.016; // Molekulargewicht des Wasserdampfes (kg/kmol)
+  var gk = 8214.3; // universelle Gaskonstante (J/(kmol*K))
+  var t0 = 273.15; // Absolute Temperatur von 0 °C (Kelvin)
+  var tk = t + t0; // Temperatur in Kelvin
+
+  var a, b;
+  if (t >= 0) {
+    a = 7.5;
+    b = 237.3;
+  } else if (t < 0) {
+    a = 7.6;
+    b = 240.7;
+  }
+
+  // Sättigungsdampfdruck (hPa)
+  var sdd = 6.1078 * Math.pow(10, (a * t) / (b + t));
+
+  // Dampfdruck (hPa)
+  var dd = sdd * (r / 100);
+
+  // Wasserdampfdichte bzw. absolute Feuchte (g/m3)
+  var af = Math.pow(10, 5) * mw / gk * dd / tk;
+
+  // v-Parameter
+  var v = Math.log10(dd / 6.1078);
+
+  // Taupunkttemperatur (°C)
+  var td = (b * v) / (a - v);
+  return td;
+}
