@@ -1,5 +1,7 @@
 svg {
-  background-color: var(--bg-secondary);
+  background-color: var(--bg);
+  border-radius: 5px;
+  box-shadow: 0 0 100px #dcdedf;
 }
 
 svg path {
@@ -17,4 +19,3 @@ svg .axis path, svg .axis line {
 svg text {
   fill: var(--text);
 }
-
