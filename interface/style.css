@@ -15,7 +15,7 @@ body {
   background-image: url(bg.jpg);
   background-repeat: no-repeat;
   background-size: 400px;
-  background-position-y: top;
+  background-position-y: -1.5rem;
   background-position-x: right;
 }
 
@@ -25,6 +25,10 @@ body {
 
 .alert {
   mix-blend-mode: multiply;
+}
+
+.filter {
+  margin-top: 3rem;
 }
 
 @keyframes loaderAni {

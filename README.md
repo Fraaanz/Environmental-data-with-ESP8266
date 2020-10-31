@@ -10,6 +10,4 @@ IoT Getting started with ESP8266 (NodeMCU V1), DHT22 and LM393 Sensor
 ### Web interface
 * Display data as graph (D3.js) on a webpage
 
-![esp8266 dht22 cable connection](esp8266-dht22-connection.jpg)
-
-![web interface](interface.jpg)
+![web interface and esp8266 dht22 cable connection](preview.jpg)
