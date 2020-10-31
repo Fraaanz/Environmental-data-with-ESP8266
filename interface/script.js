@@ -63,8 +63,8 @@ var margin = {
   bottom: 40,
   left: 40
 },
-  width = 1000 - margin.left - margin.right,
-  height = 500 - margin.top - margin.bottom;
+  width = 650 - margin.left - margin.right,
+  height = 400 - margin.top - margin.bottom;
 
 // Parse the date / time
 var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
@@ -198,8 +198,9 @@ d3.json("get-data.php?xDaysPast=" + xDaysPast + "&leaveOut=" + leaveOut + "&quer
     .attr("stop-color", function (d) { return d.color; });
 
   svg.append("path").attr("class", "line").attr("stroke", "url(#line-gradient)").attr("d", valueline(data));
-  svg.append("path").attr("class", "line2").attr("stroke", "url(#line-gradient)").attr("d", valueline2(data));
-
+  if (showDewPoint == true) {
+    svg.append("path").attr("class", "line2").attr("stroke", "url(#line-gradient)").attr("d", valueline2(data));
+  }
   // Add the X Axis
   svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + height + ")").call(xAxis);
 
