@@ -9,7 +9,7 @@ if (mysqli_connect_errno()) {
 
 $rows = array();
 
-  $dayQuery = date("Y-m-j", strtotime('-' . $i . ' days'));
+  $dayQuery = date("Y-m-d", strtotime('-' . $i . ' days'));
   //echo '<br><br><b>' . $dayQuery . '</b><br><br>';
 
   $query = "SELECT location FROM SensorData LIMIT 1";

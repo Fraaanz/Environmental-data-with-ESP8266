@@ -34,7 +34,7 @@ $rows = array();
 
 for ($i = 1; $i <= $xDaysPast; $i++) {
 
-  $dayQuery = date("Y-m-j", strtotime('-' . $i+1 . ' days'));
+  $dayQuery = date("Y-m-d", strtotime('-' . $i+1 . ' days'));
   //echo '<br><br><b>' . $dayQuery . '</b><br><br>';
 
   $query = "
